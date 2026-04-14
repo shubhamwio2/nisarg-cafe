@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nisarg Cafe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* --- 100% ORIGINAL CSS + PREMIUM UPGRADES --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #080b0f;
+      --bg2:     #0e1318;
+      --bg3:     #141b22;
+      --bg4:     #1c2530;
+      --accent:  #4fc3a1;
+      --accent2: #7bcbb2;
+      --accent3: #2e9e80;
+      --warn:    #e8a030;
+      --danger:  #e05252;
+      --text:    #e8f4f0;
+      --text2:   #9ab8af;
+      --text3:   #5c7a72;
+      --border:  rgba(79,195,161,0.15);
+      --glass:   rgba(255,255,255,0.03);
+      --glass-b: rgba(255,255,255,0.07);
+      --radius:  16px;
+      --radius-sm: 8px;
+      --tr: 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
+    h1,h2,h3,h4 { font-family: 'Cormorant Garamond', serif; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    input, textarea, select { font-family: 'DM Sans', sans-serif; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent3); }
+
+    /* PREMIUM ANIMATED PROMO BANNER */
+    #promo-banner {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+      background: linear-gradient(90deg, #141b22 0%, #1c2530 50%, #141b22 100%);
+      background-size: 200% auto;
+      color: var(--accent);
+      text-align: center;
+      padding: 10px 5%;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      animation: promoShine 3s linear infinite;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    @keyframes promoShine { to { background-position: 200% center; } }
+    body.has-promo #navbar { top: 38px; }
+
+    /* LOADER */
+    #loader { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; transition: opacity 0.7s ease, visibility 0.7s ease; }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-logo { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 700; color: var(--accent); letter-spacing: 5px; }
+    .loader-bar { width: 220px; height: 2px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+    .loader-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent3), var(--accent2)); animation: fill 2s ease forwards; }
+    @keyframes fill { to { width: 100%; } }
+    .loader-sub { font-size: 11px; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; }
+
+    /* TOAST */
+    #toasts { position: fixed; top: 80px; right: 24px; z-index: 8000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { background: var(--bg3); border: 1px solid var(--glass-b); color: var(--text); padding: 13px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; min-width: 260px; display: flex; align-items: center; gap: 10px; transform: translateX(130%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: all; }
+    .toast.show { transform: translateX(0); }
+
+    /* NAVBAR */
+    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 22px 5%; display: flex; align-items: center; justify-content: space-between; transition: background var(--tr), padding var(--tr), box-shadow var(--tr), top var(--tr); }
+    #navbar.scrolled { background: rgba(8,11,15,0.92); backdrop-filter: blur(20px); padding: 14px 5%; box-shadow: 0 1px 0 var(--border); }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 34px; list-style: none; }
+    .nav-links a { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; color: var(--text2); text-transform: uppercase; position: relative; transition: color var(--tr); }
+    .nav-links a::after { content:''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width var(--tr); }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .nav-auth-btn { background: transparent; border: 1px solid var(--border); color: var(--text2); padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 500; transition: all var(--tr); }
+    .nav-auth-btn:hover { border-color: var(--accent); color: var(--accent); }
+    #nav-user-name { font-size: 13px; color: var(--accent); font-weight: 600; display: none; }
+    .cart-btn { background: var(--accent); color: var(--bg); border: none; border-radius: 50px; padding: 9px 18px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: all var(--tr); }
+    .cart-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+    .cart-count { background: var(--bg); color: var(--accent); width: 18px; height: 18px; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: var(--text2); display: block; transition: all var(--tr); }
+
+    /* HERO */
+    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.25; }
+    .hero-bg { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(79,195,161,0.07) 0%, transparent 70%), linear-gradient(160deg, rgba(8,11,15,0.9) 0%, rgba(11,26,21,0.7) 50%, rgba(8,11,15,0.9) 100%); }
+    .hero-orb { position: absolute; border-radius: 50%; border: 1px solid rgba(79,195,161,0.08); animation: orbPulse 7s ease-in-out infinite; z-index: 1; pointer-events: none;}
+    .hero-orb:nth-child(1) { width: 480px; height: 480px; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .hero-orb:nth-child(2) { width: 700px; height: 700px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:1.5s; opacity:.6; }
+    @keyframes orbPulse { 0%,100%{opacity:.12;transform:translate(-50%,-50%) scale(1)} 50%{opacity:.28;transform:translate(-50%,-50%) scale(1.04)} }
+    
+    .hero-content { position: relative; z-index: 2; text-align: center; display: flex; flex-direction: column; align-items: center; padding: 0 24px; animation: fadeUp 1s ease 1.9s both; width: 100%; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+    
+    .hero-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--border); color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 8px 20px; border-radius: 50px; margin-bottom: 28px; transition: all var(--tr); }
+    .hero-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+    .hero-pill.closed { color: var(--danger); border-color: rgba(224,82,82,0.4); background: rgba(224,82,82,0.05); }
+    .hero-pill.closed .hero-pill-dot { background: var(--danger); }
+
+    .hero-title { font-size: clamp(54px, 9vw, 100px); font-weight: 700; line-height: 1.02; margin-bottom: 18px; background: linear-gradient(135deg, var(--text) 25%, var(--accent) 60%, var(--text2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+    .hero-sub { font-size: clamp(15px, 2vw, 18px); color: var(--text2); font-weight: 300; max-width: 500px; margin: 0 auto 48px; text-align: center;}
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent3), var(--accent2)); color: var(--bg); border: none; padding: 15px 36px; border-radius: 50px; font-size: 15px; font-weight: 600; position: relative; overflow: hidden; transition: all var(--tr); }
+    .btn-primary::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, transparent, rgba(255,255,255,.15), transparent); transform: translateX(-100%); transition: transform .5s ease; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(91, 141, 126, 0.25); }
+    .btn-primary:hover::before { transform: translateX(100%); }
+    .btn-outline { background: transparent; color: var(--text2); border: 1px solid var(--border); padding: 15px 36px; border-radius: 50px; font-size: 15px; font-weight: 500; transition: all var(--tr); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .hero-stats { display: flex; gap: 52px; justify-content: center; margin-top: 64px; flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .hero-stat-n { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 700; color: var(--accent); }
+    .hero-stat-l { font-size: 11px; color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+    .hero-scroll { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text3); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; animation: fadeUp 1s ease 2.3s both; z-index: 2;}
+    .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100%{opacity:.3}50%{opacity:1} }
+
+    /* SECTION COMMON */
+    section { padding: 100px 5%; }
+    .section-tag { display: flex; align-items: center; gap: 12px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+    .section-tag::before { content:''; width: 28px; height: 1px; background: var(--accent); }
+    .section-title { font-size: clamp(30px, 4vw, 50px); font-weight: 700; line-height: 1.12; margin-bottom: 14px; }
+    .section-desc { color: var(--text2); font-size: 16px; max-width: 500px; line-height: 1.7; }
+
+    /* NEW LIVE TRACKING SECTION */
+    #tracking-section { display: none; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; padding: 80px 5%; }
+    .tracker-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; background: var(--accent); filter: blur(200px); opacity: 0.15; z-index: 1; pointer-events: none; }
+    .tracker-container { max-width: 700px; margin: 0 auto; background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius); padding: 40px; position: relative; z-index: 2; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .tracking-steps { display: flex; justify-content: space-between; position: relative; margin-top: 40px; }
+    .tracking-steps::before { content: ''; position: absolute; top: 25px; left: 10%; right: 10%; height: 2px; background: var(--bg4); z-index: 1; }
+    .tracking-progress-bar { position: absolute; top: 25px; left: 10%; height: 2px; background: var(--accent); z-index: 2; width: 0%; transition: width 1s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 10px var(--accent); }
+    .t-step { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 33%; opacity: 0.4; transition: opacity 0.5s; }
+    .t-step.active, .t-step.done { opacity: 1; }
+    .t-icon { width: 52px; height: 52px; border-radius: 50%; background: var(--bg4); border: 2px solid var(--glass-b); display: flex; align-items: center; justify-content: center; font-size: 20px; transition: all 0.5s; color: var(--text3); }
+    .t-step.active .t-icon { border-color: var(--accent); background: var(--bg); color: var(--accent); box-shadow: 0 0 20px rgba(79,195,161,0.4); animation: iconPulse 2s infinite; }
+    .t-step.done .t-icon { border-color: var(--accent); background: var(--accent); color: var(--bg); }
+    @keyframes iconPulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    .t-text { text-align: center; }
+    .t-text h4 { font-size: 14px; margin-bottom: 4px; color: var(--text); }
+    .t-text p { font-size: 11px; color: var(--text3); }
+    .t-time-box { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px dashed var(--glass-b); }
+    .t-time-val { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; color: var(--accent); }
+
+    /* MENU */
+    #menu { background: var(--bg2); }
+    .menu-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+    .menu-tab { background: var(--glass); border: 1px solid var(--glass-b); color: var(--text3); padding: 9px 22px; border-radius: 50px; font-size: 13px; font-weight: 500; transition: all var(--tr); }
+    .menu-tab:hover { color: var(--text); border-color: var(--border); }
+    .menu-tab.active { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 22px; margin-top: 36px; }
+    .menu-card { background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius); overflow: hidden; position: relative; transition: all var(--tr); }
+    .menu-card:hover { transform: translateY(-6px); border-color: var(--border); box-shadow: 0 20px 40px rgba(0,0,0,.5); }
+    
+    /* PRODUCT PHOTOS */
+    .menu-card-img-wrap { width: 100%; height: 190px; overflow: hidden; background: var(--bg4); position: relative; }
+    .menu-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--tr); }
+    .menu-card:hover .menu-card-img-wrap img { transform: scale(1.08); }
+    
+    .menu-card-body { padding: 18px; }
+    .menu-card-tag { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+    .menu-card-name { font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+    .menu-card-desc { font-size: 12.5px; color: var(--text3); margin-bottom: 14px; line-height: 1.55; }
+    .menu-card-foot { display: flex; align-items: center; justify-content: space-between; }
+    .menu-card-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--accent); }
+    .add-btn { background: var(--bg4); border: 1px solid var(--border); color: var(--text2); padding: 8px 16px; border-radius: 50px; font-size: 12px; font-weight: 600; transition: all var(--tr); }
+    .add-btn:not(:disabled):hover { background: var(--accent); color: var(--bg); border-color: var(--accent); transform: scale(1.04); }
+    .add-btn:disabled { opacity: 0.4; border-color: var(--danger); color: var(--danger); cursor: not-allowed; }
+    .menu-badge { position: absolute; top: 12px; right: 12px; background: var(--accent); color: var(--bg); font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 50px; text-transform: uppercase; z-index: 2;}
+
+    /* ABOUT */
+    #about { background: var(--bg); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-visual { position: relative; }
+    
+    /* ABOUT PHOTO */
+    .about-main { aspect-ratio: 1; border-radius: var(--radius); background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .about-main img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--tr); }
+    .about-main:hover img { transform: scale(1.05); }
+
+    .about-float { position: absolute; bottom: -18px; right: -18px; background: var(--accent); color: var(--bg); width: 112px; height: 112px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; }
+    .about-float small { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #111;}
+    .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+    .about-feat { background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius-sm); padding: 16px; transition: border-color var(--tr); }
+    .about-feat:hover { border-color: var(--border); }
+    .about-feat-icon { font-size: 22px; margin-bottom: 8px; }
+    .about-feat h4 { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
+    .about-feat p { font-size: 12px; color: var(--text3); }
+
+    /* CONTACT */
+    #contact { background: var(--bg2); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+    .map-wrap { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; display: flex; flex-direction: column; }
+    .map-area { flex: 1; position: relative; overflow: hidden; background: var(--bg4); }
+    .map-footer { padding: 14px 18px; border-top: 1px solid var(--border); background: var(--bg4); display: flex; align-items: center; gap: 12px; }
+    .map-footer-txt { font-size: 13px; }
+    .map-footer-txt strong { display: block; font-size: 13.5px; margin-bottom: 2px; }
+    .map-footer-txt span { color: var(--text3); }
+    .ci-list { margin-bottom: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .ci-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px; background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius-sm); transition: border-color var(--tr); }
+    .ci-row:hover { border-color: var(--border); }
+    .ci-icon { font-size: 18px; width: 38px; text-align: center; }
+    .ci-row h4 { font-size: 12.5px; font-weight: 600; margin-bottom: 2px; }
+    .ci-row p { font-size: 12.5px; color: var(--text3); }
+    .cf-fields { display: flex; flex-direction: column; gap: 14px; }
+
+    /* CART SIDEBAR */
+    #cart-overlay { position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,.65); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: all var(--tr); }
+    #cart-overlay.open { opacity: 1; visibility: visible; }
+    #cart-sidebar { position: fixed; top: 0; right: 0; bottom: 0; width: min(420px,100vw); z-index: 3001; background: var(--bg2); border-left: 1px solid var(--border); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .42s cubic-bezier(0.4,0,0.2,1); }
+    #cart-sidebar.open { transform: translateX(0); }
+    .cart-hdr { padding: 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .cart-hdr h3 { font-size: 20px; }
+    .icon-btn { background: var(--bg4); border: 1px solid var(--border); color: var(--text2); width: 34px; height: 34px; border-radius: 50%; font-size: 17px; transition: all var(--tr); display: flex; align-items: center; justify-content: center; }
+    .icon-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+    .cart-list { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+    .cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text3); text-align: center; padding: 40px; }
+    .cart-empty-icon { font-size: 52px; opacity: .3; }
+    .cart-item { background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius-sm); padding: 13px; display: flex; gap: 12px; align-items: center; animation: slideIn .3s ease; }
+    @keyframes slideIn { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+    .ci-info { flex: 1; }
+    .ci-name { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+    .ci-price { font-size: 12.5px; color: var(--accent); font-weight: 500; }
+    .ci-ctrl { display: flex; align-items: center; gap: 7px; }
+    .qty-btn { background: var(--bg4); border: 1px solid var(--border); color: var(--text2); width: 26px; height: 26px; border-radius: 50%; font-size: 14px; transition: all var(--tr); display: flex; align-items: center; justify-content: center; }
+    .qty-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+    .qty-n { font-size: 13px; font-weight: 600; min-width: 18px; text-align: center; }
+    .rm-btn { background: none; border: none; color: var(--text3); font-size: 15px; padding: 4px; transition: color var(--tr); }
+    .rm-btn:hover { color: var(--danger); }
+    .cart-foot { padding: 18px; border-top: 1px solid var(--border); }
+    .cart-row { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--text3); margin-bottom: 7px; }
+    .cart-total { display: flex; justify-content: space-between; font-size: 19px; font-weight: 700; margin: 14px 0; }
+    .cart-total span:last-child { color: var(--accent); }
+    .checkout-btn { width: 100%; background: linear-gradient(135deg, var(--accent3), var(--accent2)); color: var(--bg); border: none; padding: 14px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; transition: all var(--tr); }
+    .checkout-btn:hover:not(:disabled) { box-shadow: 0 8px 24px rgba(79,195,161,.3); transform: translateY(-1px); }
+    .checkout-btn:disabled { background: #333; color: #777; cursor: not-allowed; }
+
+    /* MODALS SHARED */
+    .modal-overlay { position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: all var(--tr); }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; transform: scale(.95); transition: transform .32s ease; }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+    .modal-hdr { padding: 26px 26px 0; display: flex; align-items: center; justify-content: space-between; }
+    .modal-hdr h2 { font-size: 24px; }
+    .modal-body { padding: 22px 26px 28px; }
+    .fgrp { margin-bottom: 18px; }
+    .flbl { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); display: block; margin-bottom: 7px; }
+    .finput { width: 100%; background: var(--bg3); border: 1px solid var(--glass-b); color: var(--text); padding: 11px 15px; border-radius: var(--radius-sm); font-size: 14px; outline: none; transition: border-color var(--tr); }
+    .finput:focus { border-color: var(--accent); }
+
+    /* AUTH MODAL - Fully Restored UI */
+    #auth-modal { position: fixed; inset: 0; z-index: 5000; background: rgba(0,0,0,.75); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: all var(--tr); }
+    #auth-modal.open { opacity: 1; visibility: visible; }
+    .auth-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); max-width: 420px; width: 100%; padding: 40px; position: relative; transform: translateY(18px); transition: transform .3s ease; }
+    #auth-modal.open .auth-box { transform: translateY(0); }
+    .auth-close { position: absolute; top: 18px; right: 18px; background: var(--bg4); border: 1px solid var(--border); color: var(--text2); width: 30px; height: 30px; border-radius: 50%; font-size: 15px; transition: all var(--tr); display: flex; align-items: center; justify-content: center; }
+    .auth-close:hover { background: var(--accent); color: var(--bg); }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .auth-title { font-size: 26px; font-weight: 700; margin-bottom: 5px; }
+    .auth-sub { font-size: 13.5px; color: var(--text3); margin-bottom: 22px; }
+    .auth-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--text3); font-size: 12px; }
+    .auth-divider::before, .auth-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+    .auth-switch { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--text3); }
+    .auth-switch button { background: none; border: none; color: var(--accent); font-weight: 600; font-size: 13.5px; }
+    .auth-switch button:hover { opacity: .75; }
+    .auth-spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: var(--bg); border-radius: 50%; animation: spin .6s linear infinite; margin: 0 auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fb-status { background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius-sm); padding: 9px 13px; margin-bottom: 18px; font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 8px; }
+    .fb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); flex-shrink: 0; transition: background .5s; }
+    .fb-dot.on { background: var(--accent); }
+
+    /* FOOTER */
+    footer { background: var(--bg); border-top: 1px solid var(--border); padding: 56px 5% 36px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 44px; }
+    .footer-brand h3 { font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+    .footer-brand p { font-size: 13.5px; color: var(--text3); max-width: 270px; line-height: 1.7; }
+    .footer-socials { display: flex; gap: 9px; margin-top: 18px; }
+    .soc-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); width: 36px; height: 36px; border-radius: 50%; font-size: 11px; font-weight: 700; transition: all var(--tr); display: flex; align-items: center; justify-content: center; }
+    .soc-btn:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); transform: translateY(-2px); }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: 13.5px; color: var(--text3); transition: color var(--tr); }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .footer-bottom p { font-size: 12.5px; color: var(--text3); }
+
+    /* FLOAT CART */
+    #float-cart { position: fixed; bottom: 26px; right: 26px; z-index: 2000; background: linear-gradient(135deg, var(--accent3), var(--accent2)); color: var(--bg); width: 54px; height: 54px; border-radius: 50%; border: none; font-size: 20px; box-shadow: 0 4px 20px rgba(79,195,161,.35); transition: all var(--tr); display: none; align-items: center; justify-content: center; }
+    #float-cart:hover { transform: scale(1.1); }
+    .float-count { position: absolute; top: -3px; right: -3px; background: var(--danger); color: #fff; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; font-weight: 700; display: none; align-items: center; justify-content: center; }
+
+    /* REVEAL ANIMATIONS */
+    .reveal       { opacity:0; transform:translateY(28px); transition: opacity .7s cubic-bezier(0.4,0,0.2,1), transform .7s cubic-bezier(0.4,0,0.2,1); }
+    .reveal-left  { opacity:0; transform:translateX(-38px); transition: opacity .7s cubic-bezier(0.4,0,0.2,1), transform .7s cubic-bezier(0.4,0,0.2,1); }
+    .reveal-right { opacity:0; transform:translateX(38px);  transition: opacity .7s cubic-bezier(0.4,0,0.2,1), transform .7s cubic-bezier(0.4,0,0.2,1); }
+    .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity:1; transform:none; }
+    .reveal-scale { opacity:0; transform:scale(0.92); transition: opacity .6s ease, transform .6s ease; }
+    .reveal-scale.visible { opacity:1; transform:scale(1); }
+
+    /* ============================================================
+       PREMIUM ANIMATIONS – additions
+    ============================================================ */
+
+    /* SCROLL PROGRESS BAR */
+    #scroll-progress { position:fixed; top:0; left:0; height:2px; width:0%; background:linear-gradient(90deg,var(--accent3),var(--accent2),var(--accent)); z-index:10000; transition:width .1s linear; box-shadow:0 0 8px var(--accent); pointer-events:none; }
+
+    /* CURSOR GLOW */
+    #cursor-glow { position:fixed; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle,rgba(79,195,161,.06) 0%,transparent 70%); pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:left .12s ease,top .12s ease; will-change:left,top; }
+
+    /* FLOATING PARTICLES */
+    .hero-particle { position:absolute; border-radius:50%; pointer-events:none; z-index:1; animation:particleFloat linear infinite; }
+    @keyframes particleFloat {
+      0%   { transform:translateY(0) rotate(0deg); opacity:0; }
+      10%  { opacity:1; }
+      90%  { opacity:.6; }
+      100% { transform:translateY(-110vh) rotate(720deg); opacity:0; }
+    }
+
+    /* RIPPLE */
+    .btn-primary, .btn-outline, .add-btn, .checkout-btn { overflow:hidden; position:relative; }
+    .ripple-wave { position:absolute; border-radius:50%; background:rgba(255,255,255,.25); transform:scale(0); animation:rippleAnim .55s linear; pointer-events:none; }
+    @keyframes rippleAnim { to { transform:scale(4.5); opacity:0; } }
+
+    /* ABOUT BADGE SPIN */
+    .about-float { animation:badgeSpin 18s linear infinite; }
+    @keyframes badgeSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .about-float span, .about-float small { animation:badgeCounter 18s linear infinite; }
+    @keyframes badgeCounter { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+
+    /* MENU CARD STAGGER */
+    .menu-card { opacity:0; transform:translateY(22px); animation:cardIn .5s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes cardIn { to { opacity:1; transform:translateY(0); } }
+
+    /* COUNTER */
+    .hero-stat-n { display:inline-block; }
+
+    /* TYPEWRITER CURSOR */
+    .tw-cursor { display:inline-block; width:2px; height:1em; background:var(--accent); margin-left:3px; vertical-align:middle; animation:twBlink .75s step-end infinite; }
+    @keyframes twBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* SECTION TAG SLIDE */
+    .section-tag { overflow:hidden; }
+    .section-tag span { display:inline-block; animation:tagIn .6s cubic-bezier(0.4,0,0.2,1) both; }
+    @keyframes tagIn { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+
+    /* NAVBAR LINK UNDERLINE GLOW */
+    .nav-links a::after { box-shadow: 0 0 6px var(--accent); }
+
+    /* FLOATING ANIMATION for about image */
+    .about-main { animation: imgFloat 6s ease-in-out infinite; }
+    @keyframes imgFloat { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
+
+    /* SHIMMER on promo banner */
+    @keyframes promoShine { 0%{background-position:0% center} 100%{background-position:200% center} }
+
+    /* GLOW PULSE on cart button */
+    .cart-btn { animation:cartGlow 3s ease-in-out infinite; }
+    @keyframes cartGlow { 0%,100%{box-shadow:0 0 0 0 rgba(79,195,161,0)} 50%{box-shadow:0 0 0 6px rgba(79,195,161,.18)} }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){ .about-grid { grid-template-columns: 1fr; } .footer-top { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:768px){
+      section { padding: 64px 5%; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.mob-open { display: flex; flex-direction: column; gap: 18px; position: absolute; top: 100%; left: 0; right: 0; background: rgba(8,11,15,.96); backdrop-filter: blur(20px); padding: 18px 5%; border-bottom: 1px solid var(--border); }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      #float-cart { display: flex; }
+      .tracking-steps { flex-direction: column; gap: 20px; }
+      .tracking-steps::before, .tracking-progress-bar { display: none; }
+      .t-step { width: 100%; flex-direction: row; text-align: left; }
+      .t-text { text-align: left; }
+    }
+    @media(max-width:480px){ .hero-stats { gap: 28px; } .about-features { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<div id="cursor-glow"></div>
+
+<div id="promo-banner"></div>
+
+<div id="loader">
+  <div class="loader-logo">NISARG</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <p class="loader-sub">Nature-inspired flavours await</p>
+</div>
+
+<div id="toasts"></div>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Nisarg</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <span id="nav-user-name"></span>
+    <button class="nav-auth-btn" id="nav-auth-btn" onclick="window.openAuth()">Sign In</button>
+    <button class="cart-btn" onclick="window.openCart()">
+      <span>🛒</span>
+      <span class="cart-count" id="nav-cart-count">0</span>
+    </button>
+    <button class="hamburger" onclick="window.toggleMobNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section id="hero">
+  <video autoplay muted loop playsinline class="hero-video-bg">
+    <source src="Kávé összefoglaló - marketing videó - Popmotion Films (1080p, h264).mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg">
+    <div class="hero-orb"></div><div class="hero-orb"></div><div class="hero-orb"></div>
+  </div>
+  <div class="hero-content">
+    <div id="hero-status-indicator" class="hero-pill">
+      <span class="hero-pill-dot"></span><span id="hero-status-text">Checking Cafe Status...</span>
+    </div>
+    <h1 class="hero-title">Nisarg Cafe</h1>
+    <p class="hero-sub" id="hero-sub-text"></p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="window.scrollToSection('menu')">Explore Menu &rarr;</button>
+      <button class="btn-outline" onclick="window.scrollToSection('about')">Our Story</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n" data-count="8" data-suffix="+">0</div><div class="hero-stat-l">Locations</div></div>
+      <div class="hero-stat"><div class="hero-stat-n" data-count="40" data-suffix="K">0</div><div class="hero-stat-l">Guests Served</div></div>
+      <div class="hero-stat"><div class="hero-stat-n" data-count="4.9" data-suffix="★">0</div><div class="hero-stat-l">Avg Rating</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<section id="tracking-section" style="display:none; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; padding: 80px 5%;">
+  <div class="tracker-glow"></div>
+  <div class="tracker-container" style="max-width: 700px; margin: 0 auto; background: var(--bg3); border: 1px solid var(--glass-b); border-radius: var(--radius); padding: 40px; position: relative; z-index: 2; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+    <div style="text-align: center;">
+      <div class="section-tag" style="justify-content: center;">Track Your Brew</div>
+      <h2 class="section-title" style="font-size: 28px;">Live Order Status</h2>
+      <p style="color: var(--text3); font-size: 14px;" id="track-order-id">Order ID: Waiting...</p>
+    </div>
+    <div class="tracking-steps">
+      <div class="tracking-progress-bar" id="t-prog-bar"></div>
+      <div class="t-step" id="t-step-1"><div class="t-icon">⏳</div><div class="t-text"><h4>Order Placed</h4><p>Waiting for cafe to accept</p></div></div>
+      <div class="t-step" id="t-step-2"><div class="t-icon">🔥</div><div class="t-text"><h4>Preparing</h4><p>Barista is brewing your order</p></div></div>
+      <div class="t-step" id="t-step-3"><div class="t-icon">✅</div><div class="t-text"><h4>Ready!</h4><p>Order is ready for pickup/delivery</p></div></div>
+    </div>
+    <div class="t-time-box">
+      <p style="color: var(--text3); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Estimated Time</p>
+      <div class="t-time-val" id="t-time-text">-- : --</div>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="menu-top reveal">
+    <div class="section-tag">Our Menu</div>
+    <h2 class="section-title">Brewed with<br/>Intention</h2>
+    <p class="section-desc">Each item is a conversation between soil, season and craft — curated to nourish both body and soul.</p>
+  </div>
+  <div class="menu-tabs reveal" id="menu-tabs">
+    <button class="menu-tab active" data-cat="all">All Items</button>
+    <button class="menu-tab" data-cat="coffee">&#9749; Coffees</button>
+    <button class="menu-tab" data-cat="snacks">&#127855; Bites</button>
+    <button class="menu-tab" data-cat="desserts">&#127856; Sweets</button>
+    <button class="menu-tab" data-cat="beverages">&#127861; Wellness</button>
+  </div>
+  <div class="menu-grid reveal" id="menu-grid"></div>
+</section>
+
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal-left">
+      <div class="about-main">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80" alt="Cafe Interior">
+      </div>
+      <div class="about-float"><span>2018</span><small>Est.</small></div>
+    </div>
+    <div class="reveal-right">
+      <div class="section-tag">Our Story</div>
+      <h2 class="section-title">Where Nature<br/>Meets the Cup</h2>
+      <p class="section-desc" style="margin-bottom:18px">Nisarg was founded on a simple belief that good food should come from good places. We source our coffee directly from the lush estates of Coorg, Araku Valley and Wayanad, roasting in small batches every 36 hours to preserve the terroir in every sip.</p>
+      <p class="section-desc">Our kitchen runs on seasonal, locally-grown produce. No artificial flavours, no shortcuts. Just honest ingredients treated with skill, care and a deep respect for the land they come from.</p>
+      <div class="about-features">
+        <div class="about-feat"><div class="about-feat-icon">&#x1F331;</div><h4>Farm Direct</h4><p>Sourced from partner farms across India</p></div>
+        <div class="about-feat"><div class="about-feat-icon">&#x1F525;</div><h4>Small-Batch Roasts</h4><p>In-house roastery, fresh every 36 hours</p></div>
+        <div class="about-feat"><div class="about-feat-icon">&#x1FAD9;</div><h4>Seasonal Menu</h4><p>Ingredients change with the harvest</p></div>
+        <div class="about-feat"><div class="about-feat-icon">&#x267B;&#xFE0F;</div><h4>Zero-Waste Kitchen</h4><p>Composting, reuse and mindful packaging</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div style="text-align:center;max-width:540px;margin:0 auto 56px" class="reveal">
+    <div class="section-tag" style="justify-content:center">Find Us</div>
+    <h2 class="section-title">Visit or Reach Out</h2>
+    <p class="section-desc" style="margin:0 auto">Whether it is a reservation, a wholesale inquiry, or just a hello — we would love to hear from you.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="reveal-left">
+      <div class="map-wrap">
+        <div class="map-area" id="map-area">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1168.0494447426176!2d75.32115162453678!3d19.879796030950393!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdba2eec3063545%3A0xc3ba36f74aeb9cb4!2sNirala%20Bazar%2C%20Chatrapati%20Sambhajinagar%20(Aurangabad)%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1715421253000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="map-footer">
+          <span style="font-size:22px">&#x1F3E1;</span>
+          <div class="map-footer-txt">
+            <strong>Nisarg Cafe &mdash; Sambhajinagar</strong>
+            <span>Nirala Bazar, Chhatrapati Sambhajinagar 431001</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <div class="ci-list">
+        <div class="ci-row"><span class="ci-icon">&#x1F4DE;</span><div><h4>Phone</h4><p>+91 97654 32100</p></div></div>
+        <div class="ci-row"><span class="ci-icon">&#x2709;&#xFE0F;</span><div><h4>Email</h4><p>hello@nisargcafe.in</p></div></div>
+        <div class="ci-row"><span class="ci-icon">&#x1F550;</span><div><h4>Hours</h4><p>Mon&ndash;Fri 7am&ndash;10pm &middot; Sat&ndash;Sun 8am&ndash;11pm</p></div></div>
+      </div>
+      <div class="section-tag" style="margin-bottom:14px">Send a Message</div>
+      <div class="cf-fields">
+        <input class="finput" type="text"  id="cf-name"  placeholder="Your name" />
+        <input class="finput" type="email" id="cf-email" placeholder="Your email" />
+        <textarea class="finput" id="cf-msg" rows="4" placeholder="Your message" style="resize:vertical"></textarea>
+        <button class="btn-primary" style="width:100%" onclick="window.submitContact()">Send Message &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <h3>Nisarg Cafe</h3>
+      <p>A nature-inspired premium cafe experience, crafted for those who believe quality begins at the root.</p>
+      <div class="footer-socials">
+        <button class="soc-btn">In</button><button class="soc-btn">Tw</button>
+        <button class="soc-btn">Fb</button><button class="soc-btn">Yt</button>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Explore</h4><ul><li><a href="#hero">Home</a></li><li><a href="#menu">Menu</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Menu</h4><ul><li><a href="#menu">Coffees</a></li><li><a href="#menu">Bites</a></li><li><a href="#menu">Sweets</a></li><li><a href="#menu">Wellness</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Careers</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Nisarg Cafe. All rights reserved.</p>
+    <p>Made with &#x1F33F; in Maharashtra</p>
+  </div>
+</footer>
+
+<button id="float-cart" onclick="window.openCart()">
+  &#x1F6D2;
+  <span class="float-count" id="float-count">0</span>
+</button>
+
+<div id="cart-overlay" onclick="window.closeCart()"></div>
+<div id="cart-sidebar">
+  <div class="cart-hdr">
+    <h3>Your Order</h3>
+    <button class="icon-btn" onclick="window.closeCart()">&#x2715;</button>
+  </div>
+  <div class="cart-list" id="cart-list"></div>
+  <div class="cart-foot" id="cart-foot" style="display:none">
+    <div class="cart-row"><span>Subtotal</span><span id="cart-sub">&#8377;0</span></div>
+    <div class="cart-row"><span>Delivery</span><span>&#8377;49</span></div>
+    <div class="cart-row"><span>GST (5%)</span><span id="cart-gst">&#8377;0</span></div>
+    <div class="cart-total"><span>Total</span><span id="cart-tot">&#8377;0</span></div>
+    <p id="closed-msg" style="color:var(--danger); font-size:12px; font-weight:bold; display:none; text-align:center;">Cafe is currently closed. Cannot accept orders.</p>
+    <button class="checkout-btn" id="checkout-start-btn" onclick="window.openCheckout()">Proceed to Checkout &rarr;</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-box">
+    <div class="modal-hdr"><h2>Checkout</h2><button class="icon-btn" onclick="window.closeCheckout()">&#x2715;</button></div>
+    <div class="modal-body">
+      <div class="section-tag" style="margin-bottom:14px">Delivery Details</div>
+      <div class="fgrp"><label class="flbl">Full Name</label><input class="finput" type="text" id="co-name" placeholder="Rahul Sharma" /></div>
+      <div class="fgrp"><label class="flbl">Phone Number</label><input class="finput" type="tel" id="co-phone" placeholder="+91 98765 43210" /></div>
+      <div class="fgrp"><label class="flbl">Delivery Address</label><textarea class="finput" id="co-addr" rows="2" placeholder="Flat, Street, City, Pin" style="resize:vertical"></textarea></div>
+      <div class="fgrp"><label class="flbl">Payment Method</label>
+        <select class="finput" id="co-pay">
+          <option value="upi">UPI / GPay / PhonePe</option>
+          <option value="card">Credit / Debit Card</option>
+          <option value="cod">Cash on Delivery</option>
+        </select>
+      </div>
+      <button class="btn-primary" style="width:100%;margin-top:6px" id="place-btn" onclick="window.placeOrder()">Place Order &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<div id="auth-modal">
+  <div class="auth-box">
+    <button class="auth-close" onclick="window.closeAuth()">&#x2715;</button>
+    <div class="auth-form active" id="login-form">
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-sub">Sign in to track orders and earn Nisarg Rewards</p>
+      <div class="fb-status"><span class="fb-dot" id="fb-dot-l"></span><span id="fb-txt-l">Connecting to Firebase</span></div>
+      <div class="fgrp"><label class="flbl">Email</label><input class="finput" type="email" id="li-email" placeholder="you@example.com" /></div>
+      <div class="fgrp"><label class="flbl">Password</label><input class="finput" type="password" id="li-pass" placeholder="Your password" /></div>
+      <button class="btn-primary" style="width:100%;margin-top:4px" id="li-btn" onclick="window.doLogin()">
+        <span id="li-txt">Sign In</span><div class="auth-spinner" id="li-spin"></div>
+      </button>
+      <div class="auth-divider">or</div>
+      <button class="btn-outline" style="width:100%;text-align:center" onclick="window.doGoogle()">Continue with Google</button>
+      <div class="auth-switch">No account? <button onclick="window.switchAuth('signup')">Sign up free</button></div>
+    </div>
+    <div class="auth-form" id="signup-form">
+      <h2 class="auth-title">Join Nisarg</h2>
+      <p class="auth-sub">Create your account and start earning Nisarg Rewards</p>
+      <div class="fb-status"><span class="fb-dot" id="fb-dot-s"></span><span id="fb-txt-s">Connecting to Firebase</span></div>
+      <div class="fgrp"><label class="flbl">Full Name</label><input class="finput" type="text" id="su-name" placeholder="Your full name" /></div>
+      <div class="fgrp"><label class="flbl">Email</label><input class="finput" type="email" id="su-email" placeholder="you@example.com" /></div>
+      <div class="fgrp"><label class="flbl">Password</label><input class="finput" type="password" id="su-pass" placeholder="Min. 6 characters" /></div>
+      <button class="btn-primary" style="width:100%;margin-top:4px" id="su-btn" onclick="window.doSignup()">
+        <span id="su-txt">Create Account</span><div class="auth-spinner" id="su-spin"></div>
+      </button>
+      <div class="auth-switch">Already a member? <button onclick="window.switchAuth('login')">Sign in</button></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }                                  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword,
+         signInWithEmailAndPassword, signInWithPopup,
+         GoogleAuthProvider, onAuthStateChanged,
+         signOut, updateProfile }                         from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, push, set, onValue, serverTimestamp }  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyA7Baba4pBPwBZyKvtShjiGzjAi5riTqLA",
+  authDomain:        "nisarg-97acf.firebaseapp.com",
+  databaseURL:       "https://nisarg-97acf-default-rtdb.firebaseio.com",
+  projectId:         "nisarg-97acf"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getDatabase(app);
+const gp   = new GoogleAuthProvider();
+
+window.isCafeClosed = false;
+
+/* --- SETTINGS LISTENER --- */
+onValue(ref(db, 'settings'), (snap) => {
+  const data = snap.val() || {};
+  
+  window.isCafeClosed = (data.cafeStatus === 'closed');
+  
+  const heroBadge = document.getElementById('hero-status-indicator');
+  const heroText = document.getElementById('hero-status-text');
+  const checkoutBtn = document.getElementById('checkout-start-btn');
+  const closedMsg = document.getElementById('closed-msg');
+  
+  if (window.isCafeClosed) {
+    heroBadge.className = 'hero-pill closed';
+    heroText.innerText = '🔴 Currently Closed';
+    checkoutBtn.disabled = true;
+    closedMsg.style.display = 'block';
+  } else {
+    heroBadge.className = 'hero-pill';
+    heroText.innerText = 'Now Open in Sambhajinagar';
+    checkoutBtn.disabled = false;
+    closedMsg.style.display = 'none';
+  }
+  
+  if(window.currentFilter) { window.renderMenu(window.currentFilter); } else { window.renderMenu('all'); }
+
+  const promo = document.getElementById('promo-banner');
+  if(data.offerText && data.offerText.trim() !== '') {
+    promo.textContent = data.offerText;
+    promo.style.display = 'block';
+    document.body.classList.add('has-promo');
+  } else {
+    promo.style.display = 'none';
+    document.body.classList.remove('has-promo');
+  }
+});
+
+/* --- TRACKING LOGIC --- */
+let activeOrderId = null;
+window.saveOrderToDb = async function(data) {
+  try {
+    const newOrderRef = push(ref(db, 'orders'));
+    activeOrderId = newOrderRef.key;
+    data.orderId = 'NSG-' + activeOrderId.slice(-4).toUpperCase();
+    data.status = 'pending';
+    
+    await set(newOrderRef, Object.assign({}, data, { timestamp: serverTimestamp() }));
+    
+    document.getElementById('tracking-section').style.display = 'block';
+    document.getElementById('track-order-id').innerText = 'Order ID: ' + data.orderId;
+    window.scrollToSection('tracking-section');
+    
+    startTracking(activeOrderId);
+  } catch(e) { console.warn('Order save:', e.message); }
+};
+
+function startTracking(id) {
+  onValue(ref(db, 'orders/' + id), (snap) => {
+    const order = snap.val();
+    if(!order) return;
+    
+    const s1 = document.getElementById('t-step-1');
+    const s2 = document.getElementById('t-step-2');
+    const s3 = document.getElementById('t-step-3');
+    const bar = document.getElementById('t-prog-bar');
+    const timeBox = document.getElementById('t-time-text');
+
+    s1.className = 't-step'; s2.className = 't-step'; s3.className = 't-step';
+
+    if(order.status === 'pending') { 
+      s1.classList.add('active'); bar.style.width = '10%'; timeBox.textContent = 'Wait'; 
+    } else if(order.status === 'accepted') { 
+      s1.classList.add('done'); s2.classList.add('active'); bar.style.width = '50%'; timeBox.textContent = '15 Min'; 
+    } else if(order.status === 'ready') { 
+      s1.classList.add('done'); s2.classList.add('done'); s3.classList.add('active'); bar.style.width = '90%'; timeBox.textContent = 'Ready'; 
+    } else if(order.status === 'completed') {
+      s1.classList.add('done'); s2.classList.add('done'); s3.classList.add('done'); bar.style.width = '100%'; timeBox.textContent = 'Done!';
+    }
+  });
+}
+
+/* --- AUTHENTICATION LOGIC --- */
+function markConnected() {
+  ['l','s'].forEach(function(k) {
+    var dot = document.getElementById('fb-dot-' + k);
+    var txt = document.getElementById('fb-txt-' + k);
+    if (dot) dot.classList.add('on');
+    if (txt) txt.textContent = 'Firebase connected';
+  });
+}
+
+onAuthStateChanged(auth, function(user) {
+  markConnected();
+  var nameEl  = document.getElementById('nav-user-name');
+  var authBtn = document.getElementById('nav-auth-btn');
+  if (user) {
+    var display = user.displayName || user.email.split('@')[0];
+    nameEl.textContent   = 'Hi, ' + display;
+    nameEl.style.display = 'block';
+    authBtn.textContent  = 'Sign Out';
+    authBtn.onclick      = function() { signOut(auth).then(function() { window.showToast('Signed out. See you soon!', 'info'); }); };
+  } else {
+    nameEl.style.display = 'none';
+    authBtn.textContent  = 'Sign In';
+    authBtn.onclick      = window.openAuth;
+  }
+});
+
+function setLoad(id, on) {
+  var btn = document.getElementById(id + '-btn');
+  var sp  = document.getElementById(id + '-spin');
+  var tx  = document.getElementById(id + '-txt');
+  if (!btn) return;
+  btn.disabled      = on;
+  sp.style.display  = on ? 'block' : 'none';
+  tx.style.display  = on ? 'none'  : 'inline';
+}
+
+window.doLogin = async function() {
+  var email = document.getElementById('li-email').value.trim();
+  var pass  = document.getElementById('li-pass').value;
+  if (!email || !pass) { window.showToast('Please fill all fields', 'warning'); return; }
+  setLoad('li', true);
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    window.closeAuth(); window.showToast('Welcome back to Nisarg!', 'success');
+  } catch(e) { window.showToast('Invalid login details.', 'warning'); }
+  finally { setLoad('li', false); }
+};
+
+window.doSignup = async function() {
+  var name  = document.getElementById('su-name').value.trim();
+  var email = document.getElementById('su-email').value.trim();
+  var pass  = document.getElementById('su-pass').value;
+  if (!name || !email || !pass) { window.showToast('Please fill all fields', 'warning'); return; }
+  if (pass.length < 6) { window.showToast('Password must be 6+ characters', 'warning'); return; }
+  setLoad('su', true);
+  try {
+    var cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, { displayName: name });
+    await set(ref(db, 'users/' + cred.user.uid), { name: name, email: email, createdAt: serverTimestamp() });
+    window.closeAuth(); window.showToast('Welcome to Nisarg, ' + name + '!', 'success');
+  } catch(e) { window.showToast('Error signing up.', 'warning'); }
+  finally { setLoad('su', false); }
+};
+
+window.doGoogle = async function() {
+  try {
+    var result = await signInWithPopup(auth, gp);
+    var user   = result.user;
+    await set(ref(db, 'users/' + user.uid), { name: user.displayName, email: user.email, photo: user.photoURL || '', lastLogin: serverTimestamp() });
+    window.closeAuth(); window.showToast('Signed in with Google!', 'success');
+  } catch(e) {
+    if (e.code !== 'auth/popup-closed-by-user') window.showToast('Google Sign In failed.', 'warning');
+  }
+};
+</script>
+
+<script>
+var menuItems = [
+  { id:1,  name:'Araku Pour-Over',     cat:'coffee',    imgUrl:'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=500&q=80', price:210, desc:'Light-roast Araku Valley beans, slow-dripped.', tag:'Single Origin', badge:'🌿 Natural' },
+  { id:2,  name:'Forest Fog Latte',      cat:'coffee',    imgUrl:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=500&q=80', price:260, desc:'Oat-milk latte layered with cardamom syrup.', tag:'Signature' },
+  { id:3,  name:'Cold Brew Kokum',       cat:'coffee',    imgUrl:'Cold Brew Kokum.jpg', price:290, desc:'18-hour cold brew blended with kokum extract.', tag:'Seasonal', badge:'⭐ New' },
+  { id:4,  name:'Coorg Dark Espresso',   cat:'coffee',    imgUrl:'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=500&q=80', price:180, desc:'Double-shot Coorg dark roast at 93C.', tag:'Classic' },
+  { id:5,  name:'Wild Mushroom Toast',   cat:'snacks',    imgUrl:'Wild Mushroom Toast.jpg', price:310, desc:'Sourdough base, foraged mushroom ragout.', tag:'Chef Pick', badge:'👨‍🍳 Chef' },
+  { id:6,  name:'Ragi Avocado Bowl',     cat:'snacks',    imgUrl:'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=500&q=80', price:280, desc:'Finger-millet toast, mashed avocado, poached egg.', tag:'Healthy' },
+  { id:7,  name:'Seed-Butter Crumpet',   cat:'snacks',    imgUrl:'https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=500&q=80', price:160, desc:'House-baked crumpet with pumpkin seed butter.', tag:'Baked Fresh' },
+  { id:9,  name:'Jaggery Panna Cotta',   cat:'desserts',  imgUrl:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=500&q=80', price:240, desc:'Silky coconut panna cotta sweetened with organic jaggery.', tag:'Signature', badge:'❤️ Fav' },
+  { id:10, name:'Dark Cardamom Cake',    cat:'desserts',  imgUrl:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=500&q=80', price:270, desc:'70% single-origin chocolate cake laced with cardamom.', tag:'Premium' }
+  
+];
+
+var cart = [];
+window.currentFilter = 'all';
+
+function getCartTotals() {
+  var sub = cart.reduce(function(s,i) { return s + i.price * i.qty; }, 0);
+  var gst = Math.round(sub * 0.05);
+  return { sub: sub, gst: gst, total: sub + 49 + gst };
+}
+
+window.updateCartUI = function() {
+  document.getElementById('nav-cart-count').textContent = cart.reduce((s,i) => s + i.qty, 0);
+  var list = document.getElementById('cart-list');
+  var foot = document.getElementById('cart-foot');
+
+  if (cart.length === 0) {
+    list.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p style="font-size:15px;font-weight:600">Your cart is empty</p><p style="font-size:13px">Add items from the menu</p></div>';
+    foot.style.display = 'none';
+  } else {
+    list.innerHTML = cart.map(function(item) {
+      return '<div class="cart-item">' +
+        '<div class="ci-info"><div class="ci-name">' + item.name + '</div><div class="ci-price">₹' + item.price + '</div></div>' +
+        '<div class="ci-ctrl">' +
+          '<button class="qty-btn" onclick="window.changeQty(' + item.id + ',-1)">−</button>' +
+          '<span class="qty-n">' + item.qty + '</span>' +
+          '<button class="qty-btn" onclick="window.changeQty(' + item.id + ',1)">+</button>' +
+        '</div></div>';
+    }).join('');
+    foot.style.display = 'block';
+    var t = getCartTotals();
+    document.getElementById('cart-sub').innerHTML = '₹' + t.sub;
+    document.getElementById('cart-gst').innerHTML = '₹' + t.gst;
+    document.getElementById('cart-tot').innerHTML = '₹' + t.total;
+  }
+}
+
+window.addToCart = function(id) {
+  if (window.isCafeClosed) { window.showToast('Cafe is closed!', 'warning'); return; }
+  var item = menuItems.find(m => m.id === id);
+  var ex = cart.find(c => c.id === id);
+  if (ex) ex.qty++; else cart.push(Object.assign({}, item, { qty: 1 }));
+  window.showToast(item.name + ' added'); window.updateCartUI();
+}
+
+window.changeQty = function(id, d) {
+  var item = cart.find(c => c.id === id);
+  item.qty += d;
+  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+  window.updateCartUI();
+}
+
+window.renderMenu = function(filter) {
+  window.currentFilter = filter;
+  var items = filter === 'all' ? menuItems : menuItems.filter(m => m.cat === filter);
+  
+  document.getElementById('menu-grid').innerHTML = items.map((item, i) => {
+    let btnHTML = window.isCafeClosed ? `<button class="add-btn" disabled>Closed</button>` : `<button class="add-btn" onclick="window.addToCart(${item.id})">+ Add</button>`;
+    
+    return `<div class="menu-card" style="animation-delay:${i * 0.06}s">
+      ${item.badge ? `<div class="menu-badge">${item.badge}</div>` : ''}
+      <div class="menu-card-img-wrap"><img src="${item.imgUrl}" alt="${item.name}"></div>
+      <div class="menu-card-body">
+        <div class="menu-card-tag">${item.tag}</div>
+        <div class="menu-card-name">${item.name}</div>
+        <div class="menu-card-desc">${item.desc}</div>
+        <div class="menu-card-foot">
+          <div class="menu-card-price">₹${item.price}</div>
+          ${btnHTML}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('menu-tabs').addEventListener('click', function(e) {
+  if (!e.target.classList.contains('menu-tab')) return;
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active'); window.renderMenu(e.target.dataset.cat);
+});
+
+// UI Controls Exported to Window for onclick
+window.openCart = function() { document.getElementById('cart-overlay').classList.add('open'); document.getElementById('cart-sidebar').classList.add('open'); document.body.style.overflow = 'hidden'; }
+window.closeCart = function() { document.getElementById('cart-overlay').classList.remove('open'); document.getElementById('cart-sidebar').classList.remove('open'); document.body.style.overflow = ''; }
+
+window.openCheckout = function() {
+  if (!cart.length) return;
+  window.closeCart(); document.getElementById('checkout-modal').classList.add('open');
+}
+window.closeCheckout = function() { document.getElementById('checkout-modal').classList.remove('open'); }
+
+window.openAuth = function() { document.getElementById('auth-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+window.closeAuth = function() { document.getElementById('auth-modal').classList.remove('open'); document.body.style.overflow = ''; }
+window.switchAuth = function(f) {
+  document.getElementById('login-form').classList.toggle('active',  f === 'login');
+  document.getElementById('signup-form').classList.toggle('active', f === 'signup');
+}
+
+window.placeOrder = async function() {
+  if (window.isCafeClosed) { window.showToast('Sorry, Cafe is Closed!', 'warning'); return; }
+  var name = document.getElementById('co-name').value.trim();
+  var phone = document.getElementById('co-phone').value.trim();
+  if (!name || !phone) { window.showToast('Please fill details!', 'warning'); return; }
+
+  var btn = document.getElementById('place-btn');
+  btn.disabled = true; btn.textContent = 'Processing...';
+
+  var t = getCartTotals();
+  var orderData = {
+    name: name, phone: phone,
+    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+    subtotal: t.sub, gst: t.gst, total: t.total
+  };
+
+  if (window.saveOrderToDb) await window.saveOrderToDb(orderData);
+
+  window.closeCheckout();
+  cart = []; window.updateCartUI();
+  btn.disabled = false; btn.textContent = 'Place Order →';
+}
+
+window.showToast = function(msg, type) {
+  var c = document.getElementById('toasts');
+  var t = document.createElement('div'); t.className = 'toast'; 
+  t.style.borderLeft = '3px solid var(--accent)';
+  t.innerHTML = '<span style="font-size:13px;font-weight:700">✓</span><span>' + msg + '</span>';
+  c.appendChild(t); requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 420); }, 3600);
+}
+
+window.scrollToSection = function(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+window.toggleMobNav = function() { document.getElementById('nav-links').classList.toggle('mob-open'); }
+document.querySelectorAll('#nav-links a').forEach(link => { link.addEventListener('click', () => { document.getElementById('nav-links').classList.remove('mob-open'); }); });
+
+window.addEventListener('scroll', function() { document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60); });
+
+var ro = new IntersectionObserver(function(entries) { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => ro.observe(el));
+
+/* ===== SCROLL PROGRESS BAR ===== */
+window.addEventListener('scroll', function() {
+  var scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scroll-progress').style.width = scrolled + '%';
+});
+
+/* ===== CURSOR GLOW ===== */
+document.addEventListener('mousemove', function(e) {
+  var glow = document.getElementById('cursor-glow');
+  if (glow) { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; }
+});
+
+/* ===== FLOATING PARTICLES ===== */
+(function spawnParticles() {
+  var hero = document.getElementById('hero');
+  if (!hero) return;
+  var colors = ['rgba(79,195,161,0.5)', 'rgba(123,203,178,0.4)', 'rgba(46,158,128,0.35)', 'rgba(255,255,255,0.25)'];
+  var sizes  = [3, 4, 5, 6, 7];
+  function spawn() {
+    var p = document.createElement('div');
+    p.className = 'hero-particle';
+    var sz = sizes[Math.floor(Math.random() * sizes.length)];
+    var dur = 8 + Math.random() * 14;
+    var delay = Math.random() * 6;
+    p.style.cssText = [
+      'width:'+sz+'px','height:'+sz+'px',
+      'left:'+(Math.random()*100)+'%',
+      'bottom:-'+sz+'px',
+      'background:'+colors[Math.floor(Math.random()*colors.length)],
+      'animation-duration:'+dur+'s',
+      'animation-delay:'+delay+'s',
+      'filter:blur('+(Math.random()>.5?1:0)+'px)'
+    ].join(';');
+    hero.appendChild(p);
+    setTimeout(function() { p.remove(); }, (dur + delay) * 1000 + 500);
+  }
+  for (var i = 0; i < 18; i++) spawn();
+  setInterval(spawn, 1800);
+})();
+
+/* ===== RIPPLE EFFECT ===== */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.btn-primary, .btn-outline, .add-btn, .checkout-btn, .cart-btn, .menu-tab');
+  if (!btn) return;
+  var r = document.createElement('span'); r.className = 'ripple-wave';
+  var rect = btn.getBoundingClientRect();
+  var sz = Math.max(rect.width, rect.height);
+  r.style.cssText = 'width:'+sz+'px;height:'+sz+'px;left:'+(e.clientX-rect.left-sz/2)+'px;top:'+(e.clientY-rect.top-sz/2)+'px';
+  btn.appendChild(r);
+  r.addEventListener('animationend', function() { r.remove(); });
+});
+
+/* ===== TYPEWRITER HERO SUBTITLE ===== */
+(function typewriter() {
+  var el = document.getElementById('hero-sub-text');
+  if (!el) return;
+  var phrases = [
+    'Rooted in nature, perfected in every cup.',
+    'Farm-fresh ingredients, single-origin beans.',
+    'A space that breathes calm into every visit.'
+  ];
+  var pi = 0, ci = 0, deleting = false;
+  var cursor = document.createElement('span'); cursor.className='tw-cursor'; el.after(cursor);
+  function tick() {
+    var full = phrases[pi];
+    if (!deleting) {
+      el.textContent = full.slice(0, ++ci);
+      if (ci === full.length) { deleting = true; setTimeout(tick, 2200); return; }
+      setTimeout(tick, 38);
+    } else {
+      el.textContent = full.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 400); return; }
+      setTimeout(tick, 18);
+    }
+  }
+  setTimeout(tick, 2400);
+})();
+
+/* ===== COUNTER ANIMATION ===== */
+(function initCounters() {
+  var counters = document.querySelectorAll('.hero-stat-n[data-count]');
+  var done = false;
+  function runCounters() {
+    if (done) return; done = true;
+    counters.forEach(function(el) {
+      var target = parseFloat(el.dataset.count);
+      var suffix = el.dataset.suffix || '';
+      var decimals = target % 1 !== 0 ? 1 : 0;
+      var start = 0, dur = 1800, step = 16;
+      var inc = target / (dur / step);
+      var interval = setInterval(function() {
+        start = Math.min(start + inc, target);
+        el.textContent = start.toFixed(decimals) + suffix;
+        if (start >= target) clearInterval(interval);
+      }, step);
+    });
+  }
+  var obs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) { setTimeout(runCounters, 2300); obs.disconnect(); }
+  }, { threshold: 0.3 });
+  var heroStats = document.querySelector('.hero-stats');
+  if (heroStats) obs.observe(heroStats);
+})();
+
+/* ===== PARALLAX HERO ===== */
+document.addEventListener('scroll', function() {
+  var heroBg = document.querySelector('.hero-video-bg');
+  if (heroBg) heroBg.style.transform = 'translateY(' + (window.scrollY * 0.28) + 'px)';
+});
+
+/* ===== STAGGER MENU CARDS ===== */
+var origRenderMenu = window.renderMenu;
+window.renderMenu = function(filter) {
+  origRenderMenu(filter);
+  document.querySelectorAll('.menu-card').forEach(function(c, i) {
+    c.style.animationDelay = (i * 0.07) + 's';
+  });
+};
+
+window.addEventListener('DOMContentLoaded', function() {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2100);
+  window.renderMenu('all');
+  window.updateCartUI();
+  setTimeout(() => { document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => ro.observe(el)); }, 150);
+});
+</script>
+</body>
+</html>
